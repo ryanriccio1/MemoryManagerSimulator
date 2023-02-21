@@ -18,6 +18,21 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\DataStructures\include\ConsoleUtil.h" />
+    <ClInclude Include="..\DataStructures\include\LinkedList.h" />
+    <ClInclude Include="..\DataStructures\include\Node.h" />
+    <ClInclude Include="..\DataStructures\include\Queue.h" />
+    <ClInclude Include="..\DataStructures\include\Stack.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\DataStructures\src\ConsoleUtil.c" />
+    <ClCompile Include="..\DataStructures\src\Driver.c" />
+    <ClCompile Include="..\DataStructures\src\LinkedList.c" />
+    <ClCompile Include="..\DataStructures\src\Node.c" />
+    <ClCompile Include="..\DataStructures\src\Queue.c" />
+    <ClCompile Include="..\DataStructures\src\Stack.c" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -132,21 +147,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\DataStructures\src\console_util.c" />
-    <ClCompile Include="..\DataStructures\src\driver.c" />
-    <ClCompile Include="..\DataStructures\src\linked_list.c" />
-    <ClCompile Include="..\DataStructures\src\node.c" />
-    <ClCompile Include="..\DataStructures\src\queue.c" />
-    <ClCompile Include="..\DataStructures\src\stack.c" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\DataStructures\include\console_util.h" />
-    <ClInclude Include="..\DataStructures\include\linked_list.h" />
-    <ClInclude Include="..\DataStructures\include\node.h" />
-    <ClInclude Include="..\DataStructures\include\queue.h" />
-    <ClInclude Include="..\DataStructures\include\stack.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

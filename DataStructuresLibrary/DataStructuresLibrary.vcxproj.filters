@@ -15,40 +15,40 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\DataStructures\src\console_util.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\DataStructures\src\driver.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\DataStructures\src\linked_list.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\DataStructures\src\node.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\DataStructures\src\queue.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\DataStructures\src\stack.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClInclude Include="..\DataStructures\include\ConsoleUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DataStructures\include\LinkedList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DataStructures\include\Node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DataStructures\include\Queue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DataStructures\include\Stack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\DataStructures\include\console_util.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\DataStructures\include\linked_list.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\DataStructures\include\node.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\DataStructures\include\queue.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\DataStructures\include\stack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ClCompile Include="..\DataStructures\src\ConsoleUtil.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DataStructures\src\Driver.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DataStructures\src\LinkedList.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DataStructures\src\Node.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DataStructures\src\Queue.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DataStructures\src\Stack.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

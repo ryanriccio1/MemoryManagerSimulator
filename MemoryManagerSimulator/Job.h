@@ -1,14 +1,13 @@
-#ifndef Job_h
-#define Job_h
+#pragma once
+
 #include <stdlib.h>
 #include <stdio.h>
-#include "linked_list.h"
+#include "PMT.h"
 
 
-
-
-
-
-
-
-#endif Job_h
+typedef struct Job
+{
+	char* name;
+	size_t id;
+	PMT* pageManagementTable;
+} Job;
