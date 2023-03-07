@@ -1,14 +1,11 @@
 #pragma once
-#include <stdlib.h>
-#include <stdio.h>
 
-#include "Job.h"
+#include "LinkedList.h"
 
 typedef struct JobManager
 {
 	LinkedList* jobs;
 } JobManager;
 
-State createJob(JobManager* jobManager, char* jobName, size_t jobId);
-State removeJob(JobManager* jobManager, size_t jobId);
-State access(JobManager* jobManager, PMT* PageManagementTablePtr);
+void setupJobManager(JobManager* jobManager);
+void clearJobManager(JobManager* jobManager);

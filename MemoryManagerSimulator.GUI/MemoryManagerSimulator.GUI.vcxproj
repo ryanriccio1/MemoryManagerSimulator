@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{e66d9026-4b8d-41f2-9053-fe1cbc39b256}</ProjectGuid>
-    <RootNamespace>MemoryManagerSimulator</RootNamespace>
+    <ProjectGuid>{53dab8e3-8514-4f63-9cb8-8bc00c83b36f}</ProjectGuid>
+    <RootNamespace>MemoryManagerSimulatorGUI</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -76,8 +76,6 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <CompileAs>CompileAsC</CompileAs>
-      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -92,8 +90,6 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <CompileAs>CompileAsC</CompileAs>
-      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -108,13 +104,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\DataStructuresLibrary;..\DataStructures\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <CompileAs>CompileAsC</CompileAs>
-      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <AdditionalIncludeDirectories>C:\Users\rshar\Desktop\Projects\School\AdvOS\MemoryManagerSimulator\MemoryManagerSimulator.GUI\imgui;C:\Users\rshar\Desktop\Projects\School\AdvOS\MemoryManagerSimulator\MemoryManagerSimulator.GUI\imgui\examples\libs\glfw\include;C:\Users\rshar\Desktop\Projects\School\AdvOS\MemoryManagerSimulator\MemoryManagerSimulator.GUI\imgui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>C:\Users\rshar\Desktop\Projects\School\AdvOS\MemoryManagerSimulator\MemoryManagerSimulator.GUI\imgui\examples\libs\glfw\lib-vc2010-64\glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -125,9 +120,6 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\DataStructuresLibrary;..\DataStructures\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <CompileAs>CompileAsC</CompileAs>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -137,27 +129,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Job.c" />
-    <ClCompile Include="JobManager.c" />
-    <ClCompile Include="MemoryManager.c" />
-    <ClCompile Include="driver.c" />
-    <ClCompile Include="PageManagementTable.c" />
-    <ClCompile Include="PhysicalMemoryPage.c" />
-    <ClCompile Include="VirtualMemoryPage.c" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DataStructuresLibrary\DataStructuresLibrary.vcxproj">
-      <Project>{99e33411-dec9-42dd-bcaf-51c4b85f573f}</Project>
+    <ProjectReference Include="..\MemoryManagerSimulator\MemoryManagerSimulator.vcxproj">
+      <Project>{e66d9026-4b8d-41f2-9053-fe1cbc39b256}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Constants.h" />
-    <ClInclude Include="Job.h" />
-    <ClInclude Include="JobManager.h" />
-    <ClInclude Include="PhysicalMemoryPage.h" />
-    <ClInclude Include="MemoryManager.h" />
-    <ClInclude Include="VirtualMemoryPage.h" />
-    <ClInclude Include="PageManagementTable.h" />
+    <ClCompile Include="MainWindow.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

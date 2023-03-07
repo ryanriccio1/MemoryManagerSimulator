@@ -15,7 +15,25 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="MemoryManagerSimulator.c">
+    <ClCompile Include="driver.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryManager.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Job.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="JobManager.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicalMemoryPage.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VirtualMemoryPage.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PageManagementTable.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -26,19 +44,16 @@
     <ClInclude Include="JobManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PMT.h">
+    <ClInclude Include="PageManagementTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Page.h">
+    <ClInclude Include="VirtualMemoryPage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MemoryManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Memory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TLB.h">
+    <ClInclude Include="PhysicalMemoryPage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Constants.h">
