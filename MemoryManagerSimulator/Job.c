@@ -9,7 +9,7 @@ void setupJob(Job* job)
 	assert(job);
 
 	job->pmt = malloc(sizeof(PageManagementTable));
-	setupPageManagementTable(job->pmt);
+	job->pmt = setupPageManagementTable(job->pmt);
 }
 void clearJob(Job* job)
 {
@@ -18,5 +18,4 @@ void clearJob(Job* job)
 	job->name = NULL;
 
 	clearPageManagementTable(job->pmt);
-	free(job->pmt);
 }

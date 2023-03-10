@@ -36,6 +36,9 @@
     <ClCompile Include="PageManagementTable.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Constants.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Job.h">

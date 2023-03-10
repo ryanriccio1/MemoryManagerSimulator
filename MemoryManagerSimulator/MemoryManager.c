@@ -10,14 +10,22 @@
 #include "Job.h"
 
 
-void createJob(MemoryManager* memoryManager, char* jobName, size_t jobId)
+Job* createJob(MemoryManager* memoryManager, char* jobName, size_t jobId)
 {
 	assert(memoryManager);
+
+	for (size_t idx = 0; idx < memoryManager->jobManager->jobs->length; idx++)
+	{
+		Job* currentJob = memoryManager->jobManager->jobs->getByIndex(memoryManager->jobManager->jobs, idx);
+		if (currentJob->id == jobId)
+			return NULL;
+	}
 	Job* newJob = malloc(sizeof(Job));
 	setupJob(newJob);
 	newJob->id = jobId;
 	newJob->name = jobName;
 	memoryManager->jobManager->jobs->append(memoryManager->jobManager->jobs, newJob, sizeof(Job));
+	return newJob;
 }
 
 bool removeJob(MemoryManager* memoryManager, size_t jobId)
@@ -156,8 +164,10 @@ PhysicalMemoryPage* getFreePage(MemoryManager* memoryManager, ReplacementMethod 
 }
 
 
-void setupMemoryManager(MemoryManager* memoryManager)
+MemoryManager* setupMemoryManager(MemoryManager* memoryManager)
 {
+	assert(memoryManager);
+	memoryManager = realloc(memoryManager, sizeof(MemoryManager) + sizeof(PhysicalMemoryPage*) * PHYSICAL_PAGES);
 	assert(memoryManager);
 
 	memoryManager->jobManager = malloc(sizeof(JobManager));
@@ -172,7 +182,7 @@ void setupMemoryManager(MemoryManager* memoryManager)
 	setupLinkedList(memoryManager->validVirtualPages, Pointer);
 	setupLinkedList(memoryManager->freePhysicalPages, Pointer);
 
-	uint64_t* nextAddress = 0x0000;
+	uint64_t nextAddress = 0x0000;
 	for (size_t idx = 0; idx < PHYSICAL_PAGES; idx++)
 	{
 		memoryManager->physicalMemoryPages[idx] = malloc(sizeof(PhysicalMemoryPage));
@@ -180,6 +190,7 @@ void setupMemoryManager(MemoryManager* memoryManager)
 		memoryManager->freePhysicalPages->append(memoryManager->freePhysicalPages, memoryManager->physicalMemoryPages[idx], idx);
 		nextAddress += PAGE_SIZE;
 	}
+	return memoryManager;
 }
 
 void cleanupMemoryManager(MemoryManager* memoryManager)

@@ -6,20 +6,19 @@
 
 int main()
 {
-	printf("PAGE SIZE: %d\n", PAGE_SIZE);
-	printf("PHYSICAL MEMORY: %d\n", PHYSICAL_MEMORY_SIZE);
-	printf("VIRUTAL MEMORY: %d\n", VIRTUAL_MEMORY_SIZE);
+	initializeDefaultValues();
+	printf("PAGE SIZE: %lld\n", PAGE_SIZE);
+	printf("PHYSICAL MEMORY: %lld\n", PHYSICAL_MEMORY_SIZE);
+	printf("VIRUTAL MEMORY: %lld\n", VIRTUAL_MEMORY_SIZE);
 
-	printf("OFFSET BITS: %d\n", OFFSET_BITS);
-	printf("PAGE BITS: %d\n", PAGE_BITS);
-	printf("INSTRUCTION BITS: %d\n", INSTRUCTION_BITS);
-	printf("VIRTUAL PAGES: %d\n", VIRTUAL_PAGES);
-	printf("PHYSICAL PAGES: %d\n", PHYSICAL_PAGES);
+	printf("OFFSET BITS: %lld\n", OFFSET_BITS);
+	printf("PAGE BITS: %lld\n", PAGE_BITS);
+	printf("INSTRUCTION BITS: %lld\n", INSTRUCTION_BITS);
+	printf("VIRTUAL PAGES: %lld\n", VIRTUAL_PAGES);
+	printf("PHYSICAL PAGES: %lld\n", PHYSICAL_PAGES);
 	
-	printf("TLB LEN: %d\n", TLB_LENGTH);
-
 	MemoryManager* memMgr = malloc(sizeof(MemoryManager));
-	setupMemoryManager(memMgr);
+	memMgr = setupMemoryManager(memMgr);
 	createJob(memMgr, "test", 1);
 	createJob(memMgr, "test2", 123);
 

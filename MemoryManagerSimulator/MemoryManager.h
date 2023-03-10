@@ -9,9 +9,9 @@
 
 typedef enum ReplacementMethod
 {
-	LRU,
-	LFU,
-	FIFO
+	LRU = 0,
+	LFU = 1,
+	FIFO = 2
 } ReplacementMethod;
 
 typedef struct MemoryManager
@@ -21,15 +21,15 @@ typedef struct MemoryManager
 	Queue* fifoQueue;
 	LinkedList* validVirtualPages;
 	LinkedList* freePhysicalPages;
-	PhysicalMemoryPage* physicalMemoryPages[PHYSICAL_PAGES];
+	PhysicalMemoryPage* physicalMemoryPages[];
 } MemoryManager;
 
-void createJob(MemoryManager* memoryManager, char* jobName, size_t jobId);
+Job* createJob(MemoryManager* memoryManager, char* jobName, size_t jobId);
 bool removeJob(MemoryManager* memoryManager, size_t jobId);
 void* accessJob(MemoryManager* memoryManager, size_t jobId, uint64_t virtualMemoryAddress, ReplacementMethod method);
 Job* findJob(MemoryManager* memoryManager, size_t jobId);
 PhysicalMemoryPage* getFreePage(MemoryManager* memoryManager, ReplacementMethod method);
 
-void setupMemoryManager(MemoryManager* memoryManager);
+MemoryManager* setupMemoryManager(MemoryManager* memoryManager);
 void cleanupMemoryManager(MemoryManager* memoryManager);
 

@@ -1,3 +1,6 @@
 [submodule "DataStructures"]
 	path = DataStructures
 	url = https://github.com/ryanriccio1/DataStructures.git
+[submodule "MemoryManagerSimulator.GUI/imgui"]
+	path = MemoryManagerSimulator.GUI/imgui
+	url = https://github.com/ocornut/imgui.git

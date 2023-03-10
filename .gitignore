@@ -18,12 +18,15 @@
 
 # Libraries
 *.lib
+!MemoryManagerSimulator.GUI/glfw/**/*.lib
 *.a
 *.la
 *.lo
 
 # Shared objects (inc. Windows DLLs)
 *.dll
+!MemoryManagerSimulator.GUI/glfw/**/*.dll
+
 *.so
 *.so.*
 *.dylib
