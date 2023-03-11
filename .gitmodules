@@ -4,3 +4,11 @@
 [submodule "MemoryManagerSimulator.GUI/imgui"]
 	path = MemoryManagerSimulator.GUI/imgui
 	url = https://github.com/ocornut/imgui.git
+[submodule "MemoryManagerSimulator.GUI/fmt"]
+	path = MemoryManagerSimulator.GUI/fmt
+	url = https://github.com/fmtlib/fmt.git
+[submodule "MemoryManagerSimulator.GUI/glfw"]
+	path = MemoryManagerSimulator.GUI/glfw
+	url = https://github.com/glfw/glfw.git
+[submodule "MemoryManagerSimulator.Gui/glfw"]
+	branch = 3.3-stable

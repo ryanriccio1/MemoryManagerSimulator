@@ -4,18 +4,18 @@
 
 #include <iostream>
 #include <string>
-#include <format>
+#include <fmt/core.h>
 #include <iomanip>
 #include <sstream>
 #include <bitset>
-
+#include <cmath>
 
 #include "MemoryManagerWrapper.h"
 #include "ConsolaTTF.h"
 
 #pragma warning(disable : 4996)
 
-MemoryManagerGuiContext::MemoryManagerGuiContext(GLFWwindow* window, const char* glsl_version) : ImGuiDataContext(window, glsl_version), window(window)
+MemoryManagerGuiContext::MemoryManagerGuiContext(GLFWwindow *window, const char *glsl_version) : ImGuiDataContext(window, glsl_version), window(window)
 {
 	MemoryManagerConstants::initializeConsts();
 
@@ -23,21 +23,19 @@ MemoryManagerGuiContext::MemoryManagerGuiContext(GLFWwindow* window, const char*
 	glfwGetWindowContentScale(window, &xScale, &yScale);
 	dpiScaleFactor = xScale;
 
-	ImGuiIO& io = ImGui::GetIO();
-	io.Fonts->AddFontFromMemoryCompressedBase85TTF(ConsolaTTF_compressed_data_base85, 13*dpiScaleFactor);
+	ImGuiIO &io = ImGui::GetIO();
+	io.Fonts->AddFontFromMemoryCompressedBase85TTF(ConsolaTTF_compressed_data_base85, 13 * dpiScaleFactor);
 	largeFont = io.Fonts->AddFontFromMemoryCompressedBase85TTF(ConsolaTTF_compressed_data_base85, 26 * dpiScaleFactor);
 	ImGui::StyleColorsDark();
 	ImGui::GetStyle().WindowRounding = 6.0f;
 	ImGui::GetStyle().ScaleAllSizes(dpiScaleFactor);
 
-	//windowFlags = 0;
-	//windowFlags |= ImGuiWindowFlags_NoTitleBar;
-	//windowFlags |= ImGuiWindowFlags_NoMove;
-	//windowFlags |= ImGuiWindowFlags_NoResize;
-	//windowFlags |= ImGuiWindowFlags_NoCollapse;
-	
+	// windowFlags = 0;
+	// windowFlags |= ImGuiWindowFlags_NoTitleBar;
+	// windowFlags |= ImGuiWindowFlags_NoMove;
+	// windowFlags |= ImGuiWindowFlags_NoResize;
+	// windowFlags |= ImGuiWindowFlags_NoCollapse;
 }
-
 
 void MemoryManagerGuiContext::Update()
 {
@@ -48,8 +46,8 @@ void MemoryManagerGuiContext::Update()
 	static int currentJobIdx;
 	static ReplacementMethod method;
 
-	//UpdateWindowSize();
-	ImGui::Begin("Memory Manager Simulator");// , nullptr, windowFlags);              // Create a window called "Hello, world!" and append into it.
+	// UpdateWindowSize();
+	ImGui::Begin("Memory Manager Simulator"); // , nullptr, windowFlags);              // Create a window called "Hello, world!" and append into it.
 	if (ImGui::Button("Change Settings") || firstRun)
 	{
 		currentJobId = -1;
@@ -76,7 +74,7 @@ void MemoryManagerGuiContext::Update()
 	{
 		unsigned int tmp = testInstr << (sizeof(unsigned int) * 8 - *MemoryManagerConstants::m_INSTRUCTION_BITS + idx) >> ((sizeof(unsigned int) * 8) - 1);
 		ImGui::SameLine();
-		ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f),std::to_string(tmp).c_str());
+		ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), std::to_string(tmp).c_str());
 	}
 
 	for (size_t idx = 0; idx < *MemoryManagerConstants::m_OFFSET_BITS; idx++)
@@ -88,14 +86,11 @@ void MemoryManagerGuiContext::Update()
 
 	ImGui::PopFont();
 
-
 	ImGui::EndChild();
-
 
 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 	ImGui::ShowDemoWindow();
 	ImGui::End();
-
 }
 
 void MemoryManagerGuiContext::ShowPhysicalMemoryControl() const
@@ -130,7 +125,7 @@ void MemoryManagerGuiContext::ShowPhysicalMemoryControl() const
 				{
 					if (col == 0)
 					{
-						std::string addr = std::format("{:#x}", physicalAddress);
+						std::string addr = fmt::format("{:#x}", physicalAddress);
 						ImGui::Text(addr.c_str());
 						physicalAddress += *MemoryManagerConstants::m_PAGE_SIZE;
 					}
@@ -141,13 +136,13 @@ void MemoryManagerGuiContext::ShowPhysicalMemoryControl() const
 					}
 					if (col == 2)
 					{
-						VirtualMemoryPage* virtualPage = memoryManager->memoryManager->physicalMemoryPages[row]->virtualMemoryPage;
+						VirtualMemoryPage *virtualPage = memoryManager->memoryManager->physicalMemoryPages[row]->virtualMemoryPage;
 						if (virtualPage)
 						{
 							size_t jobId;
 							for (size_t jobIdx = 0; jobIdx < memoryManager->memoryManager->jobManager->jobs->length; jobIdx++)
 							{
-								Job* job = (Job*)memoryManager->memoryManager->jobManager->jobs->getByIndex(memoryManager->memoryManager->jobManager->jobs, jobIdx);
+								Job *job = (Job *)memoryManager->memoryManager->jobManager->jobs->getByIndex(memoryManager->memoryManager->jobManager->jobs, jobIdx);
 								for (size_t pgIdx = 0; pgIdx < *MemoryManagerConstants::m_VIRTUAL_PAGES; pgIdx++)
 								{
 									if (job->pmt->virtualMemoryPages[pgIdx] == virtualPage)
@@ -191,9 +186,9 @@ void MemoryManagerGuiContext::ShowVirtualMemoryControl(int &currentJobIdx, int &
 		ImGui::TableSetupColumn("Physical", columnFlags, 0);
 		ImGui::TableHeadersRow();
 
-		Job* job = nullptr;
+		Job *job = nullptr;
 		if (memoryManager && currentJobId >= 0)
-			job = (Job*)memoryManager->memoryManager->jobManager->jobs->getByIndex(memoryManager->memoryManager->jobManager->jobs, currentJobIdx);
+			job = (Job *)memoryManager->memoryManager->jobManager->jobs->getByIndex(memoryManager->memoryManager->jobManager->jobs, currentJobIdx);
 		int virtualAddress = 0;
 		for (size_t row = 0; row < *MemoryManagerConstants::m_VIRTUAL_PAGES; row++)
 		{
@@ -206,7 +201,7 @@ void MemoryManagerGuiContext::ShowVirtualMemoryControl(int &currentJobIdx, int &
 				{
 					if (col == 0)
 					{
-						std::string addr = std::format("{:#x}", virtualAddress);
+						std::string addr = fmt::format("{:#x}", virtualAddress);
 						ImGui::Text(addr.c_str());
 						virtualAddress += *MemoryManagerConstants::m_PAGE_SIZE;
 					}
@@ -227,10 +222,10 @@ void MemoryManagerGuiContext::ShowVirtualMemoryControl(int &currentJobIdx, int &
 					}
 					if (col == 4)
 					{
-						PhysicalMemoryPage* physicalPage = job->pmt->virtualMemoryPages[row]->physicalMemoryPage;
+						PhysicalMemoryPage *physicalPage = job->pmt->virtualMemoryPages[row]->physicalMemoryPage;
 						if (physicalPage)
 						{
-							std::string physicalPageInfo = std::to_string(physicalPage->index) + " - " + std::format("{:#x}", physicalPage->physicalAddress);
+							std::string physicalPageInfo = std::to_string(physicalPage->index) + " - " + fmt::format("{:#x}", physicalPage->physicalAddress);
 							ImGui::Text(physicalPageInfo.c_str());
 						}
 						else
@@ -258,29 +253,47 @@ void MemoryManagerGuiContext::ShowConstantEditor()
 		ImGui::Text("Constants:");
 		ImGui::Separator();
 
-		ImGui::InputInt("Page Size", (int*)MemoryManagerConstants::m_PAGE_SIZE, 16, 128);
-		if (*MemoryManagerConstants::m_PAGE_SIZE < 1) { *MemoryManagerConstants::m_PAGE_SIZE = 16; }
-		if (*MemoryManagerConstants::m_PAGE_SIZE % 16 != 0) { *MemoryManagerConstants::m_PAGE_SIZE -= *MemoryManagerConstants::m_PAGE_SIZE % 16; }
+		ImGui::InputInt("Page Size", (int *)MemoryManagerConstants::m_PAGE_SIZE, 16, 128);
+		if (*MemoryManagerConstants::m_PAGE_SIZE < 1)
+		{
+			*MemoryManagerConstants::m_PAGE_SIZE = 16;
+		}
+		if (*MemoryManagerConstants::m_PAGE_SIZE % 16 != 0)
+		{
+			*MemoryManagerConstants::m_PAGE_SIZE -= *MemoryManagerConstants::m_PAGE_SIZE % 16;
+		}
 		if (*MemoryManagerConstants::m_PHYSICAL_MEMORY_SIZE < *MemoryManagerConstants::m_PAGE_SIZE ||
 			*MemoryManagerConstants::m_VIRTUAL_MEMORY_SIZE < *MemoryManagerConstants::m_PAGE_SIZE)
 		{
 			*MemoryManagerConstants::m_PAGE_SIZE = std::min(*MemoryManagerConstants::m_PHYSICAL_MEMORY_SIZE, *MemoryManagerConstants::m_VIRTUAL_MEMORY_SIZE);
 		}
 
-		ImGui::InputInt("Physical Memory Size", (int*)MemoryManagerConstants::m_PHYSICAL_MEMORY_SIZE, 16, 128);
-		if (*MemoryManagerConstants::m_PHYSICAL_MEMORY_SIZE < 1) { *MemoryManagerConstants::m_PHYSICAL_MEMORY_SIZE = 16; }
-		if (*MemoryManagerConstants::m_PHYSICAL_MEMORY_SIZE % 16 != 0) { *MemoryManagerConstants::m_PHYSICAL_MEMORY_SIZE -= *MemoryManagerConstants::m_PHYSICAL_MEMORY_SIZE % 16; }
+		ImGui::InputInt("Physical Memory Size", (int *)MemoryManagerConstants::m_PHYSICAL_MEMORY_SIZE, 16, 128);
+		if (*MemoryManagerConstants::m_PHYSICAL_MEMORY_SIZE < 1)
+		{
+			*MemoryManagerConstants::m_PHYSICAL_MEMORY_SIZE = 16;
+		}
+		if (*MemoryManagerConstants::m_PHYSICAL_MEMORY_SIZE % 16 != 0)
+		{
+			*MemoryManagerConstants::m_PHYSICAL_MEMORY_SIZE -= *MemoryManagerConstants::m_PHYSICAL_MEMORY_SIZE % 16;
+		}
 
-		ImGui::InputInt("Virtual Memory Size", (int*)MemoryManagerConstants::m_VIRTUAL_MEMORY_SIZE, 16, 128);
-		if (*MemoryManagerConstants::m_VIRTUAL_MEMORY_SIZE < 1) { *MemoryManagerConstants::m_VIRTUAL_MEMORY_SIZE = 16; }
-		if (*MemoryManagerConstants::m_VIRTUAL_MEMORY_SIZE % 16 != 0) { *MemoryManagerConstants::m_VIRTUAL_MEMORY_SIZE -= *MemoryManagerConstants::m_VIRTUAL_MEMORY_SIZE % 16; }
+		ImGui::InputInt("Virtual Memory Size", (int *)MemoryManagerConstants::m_VIRTUAL_MEMORY_SIZE, 16, 128);
+		if (*MemoryManagerConstants::m_VIRTUAL_MEMORY_SIZE < 1)
+		{
+			*MemoryManagerConstants::m_VIRTUAL_MEMORY_SIZE = 16;
+		}
+		if (*MemoryManagerConstants::m_VIRTUAL_MEMORY_SIZE % 16 != 0)
+		{
+			*MemoryManagerConstants::m_VIRTUAL_MEMORY_SIZE -= *MemoryManagerConstants::m_VIRTUAL_MEMORY_SIZE % 16;
+		}
 
 		ImGui::Text("Virtual Pages:\t    %lld", *MemoryManagerConstants::m_VIRTUAL_PAGES);
 		ImGui::Text("Physical Pages:\t   %lld", *MemoryManagerConstants::m_PHYSICAL_PAGES);
 		ImGui::Text("Offset Bits:\t      %lld", *MemoryManagerConstants::m_OFFSET_BITS);
 		ImGui::Text("Page Bits:\t        %lld", *MemoryManagerConstants::m_PAGE_BITS);
 		ImGui::Text("Instruction Bits:\t %lld", *MemoryManagerConstants::m_INSTRUCTION_BITS);
-		
+
 		UpdateConstantValues();
 
 		if (ImGui::Button("OK", ImVec2(120, 0)))
@@ -316,7 +329,7 @@ void MemoryManagerGuiContext::ShowCreateJobControl() const
 
 	if (ImGui::Button("Create Job", ImVec2(ImGui::GetContentRegionAvail().x, 30 * dpiScaleFactor)))
 	{
-		char* tempJobName = new char[128];
+		char *tempJobName = new char[128];
 		strcpy(tempJobName, jobName);
 		memoryManager->m_createJob(tempJobName, jobId);
 		jobId = 0;
@@ -345,7 +358,7 @@ void MemoryManagerGuiContext::ShowJobOperationControl(int &currentJobIdx, int &c
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("Free:");
 
-	static const char* comboPreview;
+	static const char *comboPreview;
 	if (method >= 0 && method < 3)
 		comboPreview = replacementMethodString[method];
 	else
@@ -374,7 +387,7 @@ void MemoryManagerGuiContext::ShowJobOperationControl(int &currentJobIdx, int &c
 
 	ImGuiInputTextFlags inputFlags = 0;
 	inputFlags |= ImGuiInputTextFlags_CharsHexadecimal;
-	//inputFlags |= ImGuiInputTextFlags_EnterReturnsTrue;
+	// inputFlags |= ImGuiInputTextFlags_EnterReturnsTrue;
 	if (currentJobIdx == -1)
 		inputFlags |= ImGuiInputTextFlags_ReadOnly;
 
@@ -400,16 +413,16 @@ void MemoryManagerGuiContext::ShowJobOperationControl(int &currentJobIdx, int &c
 	ImGui::EndChild();
 }
 
-void MemoryManagerGuiContext::ShowJobSelector(int& currentJobIdx, int& currentJobId) const
+void MemoryManagerGuiContext::ShowJobSelector(int &currentJobIdx, int &currentJobId) const
 {
 	std::string combo_preview_value;
-	LinkedList* jobList = nullptr;
+	LinkedList *jobList = nullptr;
 	if (memoryManager)
 	{
 		jobList = memoryManager->memoryManager->jobManager->jobs;
 		if (jobList->length > 0)
 		{
-			const Job* selectedJob = static_cast<Job*>(jobList->getByIndex(jobList, currentJobIdx));  // Pass in the preview value visible before opening the combo (it could be anything)
+			const Job *selectedJob = static_cast<Job *>(jobList->getByIndex(jobList, currentJobIdx)); // Pass in the preview value visible before opening the combo (it could be anything)
 			if (selectedJob)
 				combo_preview_value = std::to_string(selectedJob->id);
 		}
@@ -421,7 +434,7 @@ void MemoryManagerGuiContext::ShowJobSelector(int& currentJobIdx, int& currentJo
 		{
 			for (size_t idx = 0; idx < jobList->length; idx++)
 			{
-				Job* currentJob = static_cast<Job*>(jobList->getByIndex(jobList, idx));
+				Job *currentJob = static_cast<Job *>(jobList->getByIndex(jobList, idx));
 
 				const bool is_selected = (currentJobIdx == idx);
 				if (currentJob)
@@ -441,12 +454,10 @@ void MemoryManagerGuiContext::ShowJobSelector(int& currentJobIdx, int& currentJo
 						ImGui::SetItemDefaultFocus();
 					}
 				}
-				
 			}
 		}
 		ImGui::EndCombo();
 	}
-
 }
 
 void MemoryManagerGuiContext::UpdateWindowSize()

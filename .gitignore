@@ -18,14 +18,14 @@
 
 # Libraries
 *.lib
-!MemoryManagerSimulator.GUI/glfw/**/*.lib
+!MemoryManagerSimulator.GUI/glfw-libs/**/*.lib
 *.a
 *.la
 *.lo
 
 # Shared objects (inc. Windows DLLs)
 *.dll
-!MemoryManagerSimulator.GUI/glfw/**/*.dll
+!MemoryManagerSimulator.GUI/glfw-libs/**/*.dll
 
 *.so
 *.so.*
@@ -59,6 +59,7 @@ dkms.conf
 .vs/
 **/x64
 bin/
+build/
 test/googletest
 
 **/packages
