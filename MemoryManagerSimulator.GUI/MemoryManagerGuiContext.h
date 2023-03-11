@@ -22,11 +22,14 @@ private:
 	ImGuiWindowFlags windowFlags;
 	ImFont* largeFont;
 
+	uint64_t uint64log2(uint64_t input) const;
+
+
 	void ShowPhysicalMemoryControl() const;
 	void ShowVirtualMemoryControl(int& currentJobIdx, int& currentJobId) const;
 	void ShowConstantEditor();
 	void ShowCreateJobControl() const;
-	void ShowJobOperationControl(int& currentJobIdx, int& currentJobId, ReplacementMethod& method, int& addressToAccess);
+	void ShowJobOperationControl(int& currentJobIdx, int& currentJobId, ReplacementMethod& method, int& addressToAccess, int& physicalAddress);
 	void ShowJobSelector(int& currentJobIdx, int& currentJobId) const;
 	void UpdateConstantValues() const;
 };

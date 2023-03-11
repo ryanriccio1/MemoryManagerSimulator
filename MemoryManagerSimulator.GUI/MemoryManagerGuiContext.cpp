@@ -36,6 +36,7 @@ void MemoryManagerGuiContext::Update()
 
 	// render your GUI
 	static int addressToAccess;
+	static int currentPhysicalAddress;
 	static int currentJobId;
 	static int currentJobIdx;
 	static ReplacementMethod method;
@@ -53,7 +54,7 @@ void MemoryManagerGuiContext::Update()
 	ShowConstantEditor();
 	ShowCreateJobControl();
 	ImGui::SameLine();
-	ShowJobOperationControl(currentJobIdx, currentJobId, method, addressToAccess);
+	ShowJobOperationControl(currentJobIdx, currentJobId, method, addressToAccess, currentPhysicalAddress);
 	ShowVirtualMemoryControl(currentJobIdx, currentJobId);
 	ImGui::SameLine();
 	ShowPhysicalMemoryControl();
@@ -61,23 +62,40 @@ void MemoryManagerGuiContext::Update()
 	ImGui::BeginChild(7, ImVec2(300 * dpiScaleFactor, 150 * dpiScaleFactor), true);
 	ImGui::Text("Instruction Inspection");
 	ImGui::Separator();
-	unsigned int testInstr = 63;
+	ImGui::Spacing();
 	ImGui::PushFont(largeFont);
 
 	for (size_t idx = 0; idx < *MemoryManagerConstants::m_PAGE_BITS; idx++)
 	{
-		unsigned int tmp = testInstr << (sizeof(unsigned int) * 8 - *MemoryManagerConstants::m_INSTRUCTION_BITS + idx) >> ((sizeof(unsigned int) * 8) - 1);
+		unsigned int tmp = (unsigned int)addressToAccess << (sizeof(unsigned int) * 8 - *MemoryManagerConstants::m_INSTRUCTION_BITS + idx) >> ((sizeof(unsigned int) * 8) - 1);
 		ImGui::SameLine();
 		ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), std::to_string(tmp).c_str());
 	}
 
 	for (size_t idx = 0; idx < *MemoryManagerConstants::m_OFFSET_BITS; idx++)
 	{
-		unsigned int tmp = testInstr << (sizeof(unsigned int) * 8 - *MemoryManagerConstants::m_PAGE_BITS + idx) >> ((sizeof(unsigned int) * 8) - 1);
+		unsigned int tmp = (unsigned int)addressToAccess << (sizeof(unsigned int) * 8 - *MemoryManagerConstants::m_OFFSET_BITS + idx) >> ((sizeof(unsigned int) * 8) - 1);
 		ImGui::SameLine();
 		ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), std::to_string(tmp).c_str());
 	}
 
+	ImGui::PopFont();
+
+	ImGui::Text("Page Index:    ");
+	ImGui::SameLine();
+	ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), std::to_string(addressToAccess >> *MemoryManagerConstants::m_OFFSET_BITS).c_str());
+
+	ImGui::Text("Page Offset:   ");
+	ImGui::SameLine();
+	unsigned int offset = (unsigned int)addressToAccess << (sizeof(addressToAccess) * 8 - *MemoryManagerConstants::m_OFFSET_BITS) >> (sizeof(addressToAccess) * 8 - *MemoryManagerConstants::m_OFFSET_BITS);
+	ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), std::to_string(offset).c_str());
+
+	ImGui::Separator();
+
+	ImGui::Text("Last Physical Address:");
+
+	ImGui::PushFont(largeFont);
+	ImGui::Text(fmt::format("{:#08x}", currentPhysicalAddress).c_str());
 	ImGui::PopFont();
 
 	ImGui::EndChild();
@@ -97,26 +115,29 @@ void MemoryManagerGuiContext::ShowPhysicalMemoryControl() const
 	tableFlags |= ImGuiTableFlags_Borders;
 	tableFlags |= ImGuiTableFlags_RowBg;
 
-	if (ImGui::BeginTable("table1", 3, tableFlags))
+	if (ImGui::BeginTable("table1", 5, tableFlags))
 	{
 		// Display headers so we can inspect their interaction with borders.
 		// (Headers are not the main purpose of this section of the demo, so we are not elaborating on them too much. See other sections for detail
 		ImGuiTableColumnFlags columnFlags = ImGuiTableColumnFlags_WidthFixed;
 		ImGui::TableSetupColumn("Addr", columnFlags, 45.0f * dpiScaleFactor);
 		ImGui::TableSetupColumn("IDX", columnFlags, 25.0f * dpiScaleFactor);
-		ImGui::TableSetupColumn("Virtual", columnFlags, 0);
+		ImGui::TableSetupColumn("Job", columnFlags, 0);
+		ImGui::TableSetupColumn("VPg", columnFlags, 0);
+		ImGui::TableSetupColumn("Virtual Address", columnFlags, 0);
 		ImGui::TableHeadersRow();
 
 		int physicalAddress = 0;
 		for (size_t row = 0; row < *MemoryManagerConstants::m_PHYSICAL_PAGES; row++)
 		{
 			ImGui::TableNextRow();
-			for (size_t col = 0; col < 3; col++)
+			for (size_t col = 0; col < 5; col++)
 			{
 				ImGui::TableSetColumnIndex(col);
 				ImGui::AlignTextToFramePadding();
 				if (memoryManager && memoryManager->memoryManager->jobManager->jobs->length > 0)
 				{
+					VirtualMemoryPage* virtualPage = memoryManager->memoryManager->physicalMemoryPages[row]->virtualMemoryPage;
 					if (col == 0)
 					{
 						std::string addr = fmt::format("{:#x}", physicalAddress);
@@ -130,7 +151,6 @@ void MemoryManagerGuiContext::ShowPhysicalMemoryControl() const
 					}
 					if (col == 2)
 					{
-						VirtualMemoryPage *virtualPage = memoryManager->memoryManager->physicalMemoryPages[row]->virtualMemoryPage;
 						if (virtualPage)
 						{
 							size_t jobId;
@@ -143,8 +163,24 @@ void MemoryManagerGuiContext::ShowPhysicalMemoryControl() const
 										jobId = job->id;
 								}
 							}
-							std::string physicalPageInfo = "Job " + std::to_string(jobId) + ": " + std::to_string(virtualPage->index);
-							ImGui::Text(physicalPageInfo.c_str());
+							ImGui::Text(std::to_string(jobId).c_str());
+						}
+					}
+					if (col == 3)
+					{
+						if (virtualPage)
+						{
+							ImGui::Text(std::to_string(virtualPage->index).c_str());
+						}
+					}
+					if (col == 4)
+					{
+						if (virtualPage)
+						{
+							const int startingAddress = *MemoryManagerConstants::m_PAGE_SIZE * virtualPage->index;
+							const int endingAddress = startingAddress + *MemoryManagerConstants::m_PAGE_SIZE - 1;
+							auto addressRange = fmt::format("{:#x}->{:#x}", startingAddress, endingAddress);
+							ImGui::Text(fmt::format("{:>17}", addressRange).c_str());
 						}
 					}
 				}
@@ -175,9 +211,9 @@ void MemoryManagerGuiContext::ShowVirtualMemoryControl(int &currentJobIdx, int &
 		ImGuiTableColumnFlags columnFlags = ImGuiTableColumnFlags_WidthFixed;
 		ImGui::TableSetupColumn("Addr", columnFlags, 45.0f * dpiScaleFactor);
 		ImGui::TableSetupColumn("IDX", columnFlags, 25.0f * dpiScaleFactor);
-		ImGui::TableSetupColumn("Valid", columnFlags, 40.0f * dpiScaleFactor);
-		ImGui::TableSetupColumn("Ref", columnFlags, 40.0f * dpiScaleFactor);
-		ImGui::TableSetupColumn("Physical", columnFlags, 0);
+		ImGui::TableSetupColumn("Val", columnFlags, 25.0f * dpiScaleFactor);
+		ImGui::TableSetupColumn("Ref", columnFlags, 25.0f * dpiScaleFactor);
+		ImGui::TableSetupColumn("Physical Page", columnFlags, 0);
 		ImGui::TableHeadersRow();
 
 		Job *job = nullptr;
@@ -219,8 +255,8 @@ void MemoryManagerGuiContext::ShowVirtualMemoryControl(int &currentJobIdx, int &
 						PhysicalMemoryPage *physicalPage = job->pmt->virtualMemoryPages[row]->physicalMemoryPage;
 						if (physicalPage)
 						{
-							std::string physicalPageInfo = std::to_string(physicalPage->index) + " - " + fmt::format("{:#x}", physicalPage->physicalAddress);
-							ImGui::Text(physicalPageInfo.c_str());
+							auto physicalPageInfo = fmt::format("{} - {:#x}", physicalPage->index, physicalPage->physicalAddress);
+							ImGui::Text(fmt::format("{:>14}", physicalPageInfo).c_str());
 						}
 						else
 							ImGui::Text("");
@@ -247,7 +283,7 @@ void MemoryManagerGuiContext::ShowConstantEditor()
 		ImGui::Text("Constants:");
 		ImGui::Separator();
 
-		ImGui::InputInt("Page Size", (int *)MemoryManagerConstants::m_PAGE_SIZE, 16, 128);
+		ImGui::InputInt("Page Size", (int*)MemoryManagerConstants::m_PAGE_SIZE, 16, 128);
 		if (*MemoryManagerConstants::m_PAGE_SIZE < 1)
 		{
 			*MemoryManagerConstants::m_PAGE_SIZE = 16;
@@ -262,7 +298,7 @@ void MemoryManagerGuiContext::ShowConstantEditor()
 			*MemoryManagerConstants::m_PAGE_SIZE = std::min(*MemoryManagerConstants::m_PHYSICAL_MEMORY_SIZE, *MemoryManagerConstants::m_VIRTUAL_MEMORY_SIZE);
 		}
 
-		ImGui::InputInt("Physical Memory Size", (int *)MemoryManagerConstants::m_PHYSICAL_MEMORY_SIZE, 16, 128);
+		ImGui::InputInt("Physical Memory Size", (int*)MemoryManagerConstants::m_PHYSICAL_MEMORY_SIZE, 16, 128);
 		if (*MemoryManagerConstants::m_PHYSICAL_MEMORY_SIZE < 1)
 		{
 			*MemoryManagerConstants::m_PHYSICAL_MEMORY_SIZE = 16;
@@ -272,7 +308,7 @@ void MemoryManagerGuiContext::ShowConstantEditor()
 			*MemoryManagerConstants::m_PHYSICAL_MEMORY_SIZE -= *MemoryManagerConstants::m_PHYSICAL_MEMORY_SIZE % 16;
 		}
 
-		ImGui::InputInt("Virtual Memory Size", (int *)MemoryManagerConstants::m_VIRTUAL_MEMORY_SIZE, 16, 128);
+		ImGui::InputInt("Virtual Memory Size", (int*)MemoryManagerConstants::m_VIRTUAL_MEMORY_SIZE, 16, 128);
 		if (*MemoryManagerConstants::m_VIRTUAL_MEMORY_SIZE < 1)
 		{
 			*MemoryManagerConstants::m_VIRTUAL_MEMORY_SIZE = 16;
@@ -300,6 +336,7 @@ void MemoryManagerGuiContext::ShowConstantEditor()
 		ImGui::EndPopup();
 	}
 }
+
 
 void MemoryManagerGuiContext::ShowCreateJobControl() const
 {
@@ -333,7 +370,7 @@ void MemoryManagerGuiContext::ShowCreateJobControl() const
 	ImGui::EndChild();
 }
 
-void MemoryManagerGuiContext::ShowJobOperationControl(int &currentJobIdx, int &currentJobId, ReplacementMethod &method, int &addressToAccess)
+void MemoryManagerGuiContext::ShowJobOperationControl(int &currentJobIdx, int &currentJobId, ReplacementMethod &method, int &addressToAccess, int& physicalAddress)
 {
 	ImGui::BeginChild(4, ImVec2(300 * dpiScaleFactor, 175 * dpiScaleFactor), true);
 	ImGui::Text("Job Operations");
@@ -391,11 +428,13 @@ void MemoryManagerGuiContext::ShowJobOperationControl(int &currentJobIdx, int &c
 
 	ImGui::BeginDisabled(currentJobIdx == -1);
 	ImGui::InputInt("##label_addressToAccess", &addressToAccess, 0, 0, inputFlags);
+	if (addressToAccess < 0 || addressToAccess > *MemoryManagerConstants::m_VIRTUAL_MEMORY_SIZE)
+		addressToAccess = 0;
 
 	ImGui::Spacing();
 	if (ImGui::Button("Access Job", ImVec2(ImGui::GetContentRegionAvail().x, 30 * dpiScaleFactor)))
 	{
-		memoryManager->m_accessJob(currentJobId, addressToAccess, method);
+		physicalAddress = (int)memoryManager->m_accessJob(currentJobId, addressToAccess, method);
 	}
 	if (ImGui::Button("Remove Job", ImVec2(ImGui::GetContentRegionAvail().x, 30 * dpiScaleFactor)))
 	{
@@ -435,7 +474,7 @@ void MemoryManagerGuiContext::ShowJobSelector(int &currentJobIdx, int &currentJo
 				{
 					std::string jobIdString = std::to_string(currentJob->id);
 					std::string jobNameString = currentJob->name;
-					std::string label = jobIdString + "\t|\t" + jobNameString;
+					std::string label = fmt::format("{:<5} | {:>10}", jobIdString, jobNameString);
 					if (ImGui::Selectable(label.c_str(), is_selected))
 					{
 						currentJobId = currentJob->id;
@@ -465,10 +504,22 @@ void MemoryManagerGuiContext::UpdateWindowSize()
 	ImGui::SetNextWindowPos(ImVec2(0, 0));
 }
 
+uint64_t MemoryManagerGuiContext::uint64log2(uint64_t input) const
+{
+	uint64_t exp = 0;
+
+	while (input >>= 1) 
+	{
+		exp++;
+	}
+	return exp;
+}
+
 void MemoryManagerGuiContext::UpdateConstantValues() const
 {
-	*MemoryManagerConstants::m_OFFSET_BITS = (uint64_t)log2(*MemoryManagerConstants::m_PAGE_SIZE);
-	*MemoryManagerConstants::m_INSTRUCTION_BITS = (uint64_t)log2(*MemoryManagerConstants::m_VIRTUAL_MEMORY_SIZE);
+	*MemoryManagerConstants::m_OFFSET_BITS = uint64log2(*MemoryManagerConstants::m_PAGE_SIZE);
+	if (*MemoryManagerConstants::m_VIRTUAL_MEMORY_SIZE != 0)
+		*MemoryManagerConstants::m_INSTRUCTION_BITS = uint64log2(*MemoryManagerConstants::m_VIRTUAL_MEMORY_SIZE);
 	*MemoryManagerConstants::m_PAGE_BITS = *MemoryManagerConstants::m_INSTRUCTION_BITS - *MemoryManagerConstants::m_OFFSET_BITS;
 	if (*MemoryManagerConstants::m_PAGE_SIZE != 0)
 	{
