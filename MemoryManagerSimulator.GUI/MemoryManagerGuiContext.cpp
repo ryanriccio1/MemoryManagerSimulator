@@ -11,6 +11,7 @@
 
 
 #include "MemoryManagerWrapper.h"
+#include "ConsolaTTF.h"
 
 #pragma warning(disable : 4996)
 
@@ -23,8 +24,8 @@ MemoryManagerGuiContext::MemoryManagerGuiContext(GLFWwindow* window, const char*
 	dpiScaleFactor = xScale;
 
 	ImGuiIO& io = ImGui::GetIO();
-	io.Fonts->AddFontFromFileTTF("./fonts/consola.ttf", 13*dpiScaleFactor);
-	largeFont = io.Fonts->AddFontFromFileTTF("./fonts/consola.ttf", 26 * dpiScaleFactor);
+	io.Fonts->AddFontFromMemoryCompressedBase85TTF(ConsolaTTF_compressed_data_base85, 13*dpiScaleFactor);
+	largeFont = io.Fonts->AddFontFromMemoryCompressedBase85TTF(ConsolaTTF_compressed_data_base85, 26 * dpiScaleFactor);
 	ImGui::StyleColorsDark();
 	ImGui::GetStyle().WindowRounding = 6.0f;
 	ImGui::GetStyle().ScaleAllSizes(dpiScaleFactor);

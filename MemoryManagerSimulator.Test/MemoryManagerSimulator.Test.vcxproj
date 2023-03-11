@@ -45,9 +45,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataStructuresLibrary\DataStructuresLibrary.vcxproj">
-      <Project>{99e33411-dec9-42dd-bcaf-51c4b85f573f}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\MemoryManagerSimulator\MemoryManagerSimulator.vcxproj">
       <Project>{e66d9026-4b8d-41f2-9053-fe1cbc39b256}</Project>
     </ProjectReference>

@@ -141,6 +141,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\DataStructures\src\ConsoleUtil.c" />
+    <ClCompile Include="..\DataStructures\src\Driver.c" />
+    <ClCompile Include="..\DataStructures\src\LinkedList.c" />
+    <ClCompile Include="..\DataStructures\src\Node.c" />
+    <ClCompile Include="..\DataStructures\src\Queue.c" />
+    <ClCompile Include="..\DataStructures\src\Stack.c" />
     <ClCompile Include="Constants.c" />
     <ClCompile Include="Job.c" />
     <ClCompile Include="JobManager.c" />
@@ -151,11 +157,11 @@
     <ClCompile Include="VirtualMemoryPage.c" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataStructuresLibrary\DataStructuresLibrary.vcxproj">
-      <Project>{99e33411-dec9-42dd-bcaf-51c4b85f573f}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
+    <ClInclude Include="..\DataStructures\include\ConsoleUtil.h" />
+    <ClInclude Include="..\DataStructures\include\LinkedList.h" />
+    <ClInclude Include="..\DataStructures\include\Node.h" />
+    <ClInclude Include="..\DataStructures\include\Queue.h" />
+    <ClInclude Include="..\DataStructures\include\Stack.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Job.h" />
     <ClInclude Include="JobManager.h" />

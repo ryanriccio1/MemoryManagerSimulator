@@ -151,14 +151,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataStructuresLibrary\DataStructuresLibrary.vcxproj">
-      <Project>{99e33411-dec9-42dd-bcaf-51c4b85f573f}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\MemoryManagerSimulator\MemoryManagerSimulator.vcxproj">
       <Project>{e66d9026-4b8d-41f2-9053-fe1cbc39b256}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ConsolaTTF.h" />
     <ClCompile Include="ImGuiDataContext.cpp" />
     <ClCompile Include="imgui\backends\imgui_impl_glfw.cpp" />
     <ClCompile Include="imgui\backends\imgui_impl_opengl3.cpp" />
