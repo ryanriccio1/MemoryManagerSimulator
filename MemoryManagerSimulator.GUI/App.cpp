@@ -3,12 +3,13 @@
 // If you are new to Dear ImGui, read documentation from the docs/ folder + read the top of imgui.cpp.
 // Read online: https://github.com/ocornut/imgui/tree/master/docs
 
-#include "imgui.h"
+#include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 #include <GLFW/glfw3.h> // Will drag system OpenGL headers
 #include <memory>
 
+#include "Icon.h"
 #include "MemoryManagerGuiContext.h"
 
 #define GL_SILENCE_DEPRECATION
@@ -53,6 +54,13 @@ int WinMain()
 
 	if (window == nullptr)
 		return 1;
+
+	GLFWimage images[1];
+	images[0].pixels = icon;
+	images[0].height = 512;
+	images[0].width = 512;
+	glfwSetWindowIcon(window, 1, images);
+
 
 	glfwMakeContextCurrent(window);
 	glfwSwapInterval(1); // Enable vsync

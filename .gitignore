@@ -33,6 +33,7 @@
 
 # Executables
 *.exe
+!MemoryManagerSimulator.GUI/resources/*.exe
 *.out
 *.app
 *.i*86

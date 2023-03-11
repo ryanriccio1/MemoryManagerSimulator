@@ -1,15 +1,9 @@
 #include <GLFW/glfw3.h>
-
-#include "MemoryManagerGuiContext.h"
-
-#include <iostream>
-#include <string>
 #include <fmt/core.h>
-#include <iomanip>
-#include <sstream>
-#include <bitset>
+#include <string>
 #include <cmath>
 
+#include "MemoryManagerGuiContext.h"
 #include "MemoryManagerWrapper.h"
 #include "ConsolaTTF.h"
 
