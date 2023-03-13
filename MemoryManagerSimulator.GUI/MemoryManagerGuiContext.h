@@ -22,8 +22,6 @@ private:
 	ImGuiWindowFlags windowFlags;
 	ImFont* largeFont;
 
-	uint64_t uint64log2(uint64_t input) const;
-
 
 	void ShowPhysicalMemoryControl() const;
 	void ShowVirtualMemoryControl(int& currentJobIdx, int& currentJobId) const;
@@ -31,5 +29,6 @@ private:
 	void ShowCreateJobControl() const;
 	void ShowJobOperationControl(int& currentJobIdx, int& currentJobId, ReplacementMethod& method, int& addressToAccess, int& physicalAddress);
 	void ShowJobSelector(int& currentJobIdx, int& currentJobId) const;
-	void UpdateConstantValues() const;
+	void UpdateConstantValues(uint64_t &tmpPageSize, uint64_t& tmpPhysicalMemorySize, uint64_t& tmpVirtualMemorySize,
+		uint64_t& tmpOffsetBits, uint64_t& tmpInstructionBits, uint64_t& tmpPageBits, uint64_t& tmpVirtualPages, uint64_t& tmpPhysicalPages) const;
 };

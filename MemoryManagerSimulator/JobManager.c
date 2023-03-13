@@ -1,10 +1,8 @@
+#include <assert.h>
 #include <stdlib.h>
 
 #include "JobManager.h"
 
-#include <assert.h>
-
-#include "Constants.h"
 
 void setupJobManager(JobManager* jobManager)
 {

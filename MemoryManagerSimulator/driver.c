@@ -1,23 +1,25 @@
-#include "Constants.h"
-#include "MemoryManager.h"
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "MemoryManager.h"
+
+
 int main()
 {
-    initializeDefaultValues();
-    printf("PAGE SIZE: %lld\n", PAGE_SIZE);
-    printf("PHYSICAL MEMORY: %lld\n", PHYSICAL_MEMORY_SIZE);
-    printf("VIRUTAL MEMORY: %lld\n", VIRTUAL_MEMORY_SIZE);
+    MemoryManager* memMgr = malloc(sizeof(MemoryManager));
+    memMgr = setupMemoryManager(memMgr, 16, 128, 1024);
 
-    printf("OFFSET BITS: %lld\n", OFFSET_BITS);
-    printf("PAGE BITS: %lld\n", PAGE_BITS);
-    printf("INSTRUCTION BITS: %lld\n", INSTRUCTION_BITS);
-    printf("VIRTUAL PAGES: %lld\n", VIRTUAL_PAGES);
-    printf("PHYSICAL PAGES: %lld\n", PHYSICAL_PAGES);
+    printf("PAGE SIZE: %lld\n", memMgr->PAGE_SIZE);
+    printf("PHYSICAL MEMORY: %lld\n", memMgr->PHYSICAL_MEMORY_SIZE);
+    printf("VIRUTAL MEMORY: %lld\n", memMgr->VIRTUAL_MEMORY_SIZE);
 
-    MemoryManager *memMgr = malloc(sizeof(MemoryManager));
-    memMgr = setupMemoryManager(memMgr);
+    printf("OFFSET BITS: %lld\n", memMgr->OFFSET_BITS);
+    printf("PAGE BITS: %lld\n", memMgr->PAGE_BITS);
+    printf("INSTRUCTION BITS: %lld\n", memMgr->INSTRUCTION_BITS);
+    printf("VIRTUAL PAGES: %lld\n", memMgr->VIRTUAL_PAGES);
+    printf("PHYSICAL PAGES: %lld\n", memMgr->PHYSICAL_PAGES);
+
+    
     createJob(memMgr, "test", 1);
     createJob(memMgr, "test2", 123);
 

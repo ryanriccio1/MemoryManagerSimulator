@@ -1,30 +1,32 @@
+#include <assert.h>
 #include <stdlib.h>
 
 #include "Job.h"
-
-#include <assert.h>
-
-#include "Constants.h"
 #include "VirtualMemoryPage.h"
+#include "MemoryManager.h"
 
-Job* setupJob(Job* job)
+
+Job* setupJob(MemoryManager* memoryManager, Job* job)
 {
 	assert(job);
-	job = realloc(job, sizeof(Job) + sizeof(VirtualMemoryPage*) * VIRTUAL_PAGES);
+	assert(memoryManager);
 
-	for (size_t idx = 0; idx < VIRTUAL_PAGES; idx++)
+	job = realloc(job, sizeof(Job) + sizeof(VirtualMemoryPage*) * memoryManager->VIRTUAL_PAGES);
+
+	for (size_t idx = 0; idx < memoryManager->VIRTUAL_PAGES; idx++)
 	{
 		job->virtualMemoryPages[idx] = malloc(sizeof(VirtualMemoryPage));
 		setupVirtualMemoryPage(job->virtualMemoryPages[idx], idx);
 	}
 	return job;
 }
-void clearJob(Job* job)
+void clearJob(MemoryManager* memoryManager, Job* job)
 {
 	assert(job);
+	assert(memoryManager);
 
 	job->name = NULL;
-	for (size_t idx = 0; idx < VIRTUAL_PAGES; idx++)
+	for (size_t idx = 0; idx < memoryManager->VIRTUAL_PAGES; idx++)
 	{
 		free(job->virtualMemoryPages[idx]);
 	}

@@ -66,9 +66,6 @@
     <ClCompile Include="MemoryManagerWrapper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MemoryManagerConstants.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ConsolaTTF.h">
       <Filter>Header Files</Filter>
     </ClCompile>
@@ -111,9 +108,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MemoryManagerWrapper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryManagerConstants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="fmt\include\fmt\core.h">

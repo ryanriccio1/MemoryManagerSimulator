@@ -1,13 +1,11 @@
+#include <assert.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include <assert.h>
-
 
 #include "JobManager.h"
+#include "Job.h"
 #include "Queue.h"
 #include "MemoryManager.h"
-#include "Constants.h"
-#include "Job.h"
 
 
 Job* createJob(MemoryManager* memoryManager, char* jobName, size_t jobId)
@@ -21,7 +19,7 @@ Job* createJob(MemoryManager* memoryManager, char* jobName, size_t jobId)
 			return NULL;
 	}
 	Job* newJob = malloc(sizeof(Job));
-	newJob = setupJob(newJob);
+	newJob = setupJob(memoryManager, newJob);
 	newJob->id = jobId;
 	newJob->name = jobName;
 	memoryManager->jobManager->jobs->append(memoryManager->jobManager->jobs, newJob, sizeof(Job));
@@ -35,7 +33,7 @@ bool removeJob(MemoryManager* memoryManager, size_t jobId)
 	Job* job = findJob(memoryManager, jobId);
 	if (job)
 	{
-		for (size_t idx = 0; idx < VIRTUAL_PAGES; idx++)
+		for (size_t idx = 0; idx < memoryManager->VIRTUAL_PAGES; idx++)
 		{
 			VirtualMemoryPage* page = job->virtualMemoryPages[idx];
 			if (page->valid)
@@ -47,7 +45,7 @@ bool removeJob(MemoryManager* memoryManager, size_t jobId)
 				page->physicalMemoryPage->virtualMemoryPage = NULL;
 			}
 		}
-		clearJob(job);
+		clearJob(memoryManager, job);
 		memoryManager->jobManager->jobs->removeAtValue(memoryManager->jobManager->jobs, job, Deallocate);
 		return true;
 	}
@@ -57,13 +55,13 @@ bool removeJob(MemoryManager* memoryManager, size_t jobId)
 void* accessJob(MemoryManager* memoryManager, size_t jobId, uint64_t virtualMemoryAddress, ReplacementMethod method)
 {
 	assert(memoryManager);
-	if (virtualMemoryAddress < VIRTUAL_MEMORY_SIZE)
+	if (virtualMemoryAddress < memoryManager->VIRTUAL_MEMORY_SIZE)
 	{
 		Job* job = findJob(memoryManager, jobId);
 		if (job)
 		{
-			uint64_t virtualPageIndex = virtualMemoryAddress >> OFFSET_BITS;
-			uint64_t offset = virtualMemoryAddress << (sizeof(uint64_t) * 8 - OFFSET_BITS) >> (sizeof(uint64_t) * 8 - OFFSET_BITS);
+			uint64_t virtualPageIndex = virtualMemoryAddress >> memoryManager->OFFSET_BITS;
+			uint64_t offset = virtualMemoryAddress << (sizeof(uint64_t) * 8 - memoryManager->OFFSET_BITS) >> (sizeof(uint64_t) * 8 - memoryManager->OFFSET_BITS);
 
 			// get from pmt array
 			VirtualMemoryPage* virtualPage = job->virtualMemoryPages[virtualPageIndex];
@@ -117,6 +115,8 @@ PhysicalMemoryPage* getFreePage(MemoryManager* memoryManager, ReplacementMethod 
 	if (memoryManager->freePhysicalPages->isEmpty)
 	{
 		PhysicalMemoryPage* page;
+		VirtualMemoryPage* virtualPage = NULL;
+		VirtualMemoryPage* tmpVirtualPage = NULL;
 		size_t lowestRefCount = SIZE_MAX;
 		switch (method)
 		{
@@ -125,8 +125,6 @@ PhysicalMemoryPage* getFreePage(MemoryManager* memoryManager, ReplacementMethod 
 			memoryManager->fifoQueue->list->removeAtValue(memoryManager->fifoQueue->list, page, KeepAllocated);
 			break;
 		case LFU:
-			VirtualMemoryPage* virtualPage = NULL;
-			VirtualMemoryPage* tmpVirtualPage = NULL;
 			for (size_t idx = 0; idx < memoryManager->validVirtualPages->length; idx++)
 			{
 				tmpVirtualPage = memoryManager->validVirtualPages->getByIndex(memoryManager->validVirtualPages, idx);
@@ -155,19 +153,27 @@ PhysicalMemoryPage* getFreePage(MemoryManager* memoryManager, ReplacementMethod 
 		page->virtualMemoryPage = NULL;
 		return page;
 	}
-	else
-	{
-		memoryManager->freePhysicalPages->sortBySize(memoryManager->freePhysicalPages);
-		return memoryManager->freePhysicalPages->getByIndex(memoryManager->freePhysicalPages, 0);
-	}
-	return NULL;
+	memoryManager->freePhysicalPages->sortBySize(memoryManager->freePhysicalPages);
+	return memoryManager->freePhysicalPages->getByIndex(memoryManager->freePhysicalPages, 0);
+
 }
 
 
-MemoryManager* setupMemoryManager(MemoryManager* memoryManager)
+MemoryManager* setupMemoryManager(MemoryManager* memoryManager, uint64_t PAGE_SIZE, uint64_t PHYSICAL_MEMORY_SIZE,
+																uint64_t VIRTUAL_MEMORY_SIZE)
 {
 	assert(memoryManager);
-	memoryManager = realloc(memoryManager, sizeof(MemoryManager) + sizeof(PhysicalMemoryPage*) * PHYSICAL_PAGES);
+	memoryManager->PAGE_SIZE = PAGE_SIZE;
+	memoryManager->PHYSICAL_MEMORY_SIZE = PHYSICAL_MEMORY_SIZE;
+	memoryManager->VIRTUAL_MEMORY_SIZE = VIRTUAL_MEMORY_SIZE;	// virtual memory per job
+
+	memoryManager->OFFSET_BITS = uint64log2(PAGE_SIZE);
+	memoryManager->INSTRUCTION_BITS = uint64log2(VIRTUAL_MEMORY_SIZE);
+	memoryManager->PAGE_BITS = memoryManager->INSTRUCTION_BITS - memoryManager->OFFSET_BITS;
+	memoryManager->VIRTUAL_PAGES = VIRTUAL_MEMORY_SIZE / PAGE_SIZE;
+	memoryManager->PHYSICAL_PAGES = PHYSICAL_MEMORY_SIZE / PAGE_SIZE;
+
+	memoryManager = realloc(memoryManager, sizeof(MemoryManager) + sizeof(PhysicalMemoryPage*) * memoryManager->PHYSICAL_PAGES);
 	assert(memoryManager);
 
 	memoryManager->jobManager = malloc(sizeof(JobManager));
@@ -175,7 +181,7 @@ MemoryManager* setupMemoryManager(MemoryManager* memoryManager)
 	memoryManager->fifoQueue = malloc(sizeof(Queue));
 	memoryManager->validVirtualPages = malloc(sizeof(LinkedList));
 	memoryManager->freePhysicalPages = malloc(sizeof(LinkedList));
-
+	
 	setupJobManager(memoryManager->jobManager);
 	setupQueue(memoryManager->lruQueue, Pointer);
 	setupQueue(memoryManager->fifoQueue, Pointer);
@@ -183,7 +189,7 @@ MemoryManager* setupMemoryManager(MemoryManager* memoryManager)
 	setupLinkedList(memoryManager->freePhysicalPages, Pointer);
 
 	uint64_t nextAddress = 0x0000;
-	for (size_t idx = 0; idx < PHYSICAL_PAGES; idx++)
+	for (size_t idx = 0; idx < memoryManager->PHYSICAL_PAGES; idx++)
 	{
 		memoryManager->physicalMemoryPages[idx] = malloc(sizeof(PhysicalMemoryPage));
 		setupPhysicalMemoryPage(memoryManager->physicalMemoryPages[idx], idx, nextAddress);
@@ -205,8 +211,19 @@ void cleanupMemoryManager(MemoryManager* memoryManager)
 	free(memoryManager->validVirtualPages);
 	free(memoryManager->freePhysicalPages);
 
-	for (size_t idx = 0; idx < PHYSICAL_PAGES; idx++)
+	for (size_t idx = 0; idx < memoryManager->PHYSICAL_PAGES; idx++)
 	{
 		free(memoryManager->physicalMemoryPages[idx]);
 	}
+}
+
+uint64_t uint64log2(uint64_t input)
+{
+	uint64_t exp = 0;
+
+	while (input >>= 1)
+	{
+		exp++;
+	}
+	return exp;
 }

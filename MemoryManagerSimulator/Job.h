@@ -1,4 +1,5 @@
 #pragma once
+#include "MemoryManager.h"
 #include "VirtualMemoryPage.h"
 
 
@@ -9,5 +10,5 @@ typedef struct Job
 	VirtualMemoryPage* virtualMemoryPages[];
 } Job;
 
-Job* setupJob(Job* job);
-void clearJob(Job* job);
+Job* setupJob(struct MemoryManager* memoryManager, Job* job);
+void clearJob(struct MemoryManager* memoryManager, Job* job);

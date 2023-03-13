@@ -39,13 +39,7 @@
     <ClCompile Include="VirtualMemoryPage.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Constants.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\DataStructures\src\ConsoleUtil.c">
-      <Filter>Source Files\DataStructures</Filter>
-    </ClCompile>
-    <ClCompile Include="..\DataStructures\src\Driver.c">
       <Filter>Source Files\DataStructures</Filter>
     </ClCompile>
     <ClCompile Include="..\DataStructures\src\LinkedList.c">
@@ -75,9 +69,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PhysicalMemoryPage.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Constants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\DataStructures\include\ConsoleUtil.h">

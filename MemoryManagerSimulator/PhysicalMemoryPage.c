@@ -1,6 +1,6 @@
-#include  "PhysicalMemoryPage.h"
-
 #include <assert.h>
+
+#include "PhysicalMemoryPage.h"
 
 
 void setupPhysicalMemoryPage(PhysicalMemoryPage* memory, size_t index, uint64_t physicalAddress)
