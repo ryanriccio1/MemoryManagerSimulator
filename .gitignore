@@ -62,5 +62,5 @@ dkms.conf
 bin/
 build/
 test/googletest
-
+**/imgui.ini
 **/packages

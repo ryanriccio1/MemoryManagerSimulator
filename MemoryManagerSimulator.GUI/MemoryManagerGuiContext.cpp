@@ -9,11 +9,13 @@
 
 #pragma warning(disable : 4996)
 
-MemoryManagerGuiContext::MemoryManagerGuiContext(GLFWwindow *window, const char *glsl_version) : ImGuiDataContext(window, glsl_version), window(window)
+MemoryManagerGuiContext::MemoryManagerGuiContext(GLFWwindow *window, const char *glsl_version, bool divideDpiScaling) : ImGuiDataContext(window, glsl_version), window(window)
 {
 	float xScale, yScale;
 	glfwGetWindowContentScale(window, &xScale, &yScale);
 	dpiScaleFactor = xScale;
+	if (divideDpiScaling)
+		dpiScaleFactor /= 2;
 
 	ImGuiIO &io = ImGui::GetIO();
 	io.Fonts->AddFontFromMemoryCompressedBase85TTF(ConsolaTTF_compressed_data_base85, 13 * dpiScaleFactor);
@@ -489,7 +491,7 @@ void MemoryManagerGuiContext::ShowJobOperationControl(int &currentJobIdx, int &c
 	ImGui::Spacing();
 	if (ImGui::Button("Access Job", ImVec2(ImGui::GetContentRegionAvail().x, 30 * dpiScaleFactor)))
 	{
-		physicalAddress = (int)memoryManager->m_accessJob(currentJobId, addressToAccess, method);
+		physicalAddress = (uint64_t)memoryManager->m_accessJob(currentJobId, addressToAccess, method);
 	}
 	if (ImGui::Button("Remove Job", ImVec2(ImGui::GetContentRegionAvail().x, 30 * dpiScaleFactor)))
 	{

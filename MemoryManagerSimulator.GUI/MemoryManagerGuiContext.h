@@ -11,7 +11,7 @@ public:
 	static inline bool firstRun = true;
 	static inline const char* replacementMethodString[] = { "LRU", "LFU", "FIFO" };
 
-	MemoryManagerGuiContext(GLFWwindow* window, const char* glsl_version);
+	MemoryManagerGuiContext(GLFWwindow* window, const char* glsl_version, bool divideDpiScaling);
 	void Update() override;
 	void UpdateWindowSize();
 private:
