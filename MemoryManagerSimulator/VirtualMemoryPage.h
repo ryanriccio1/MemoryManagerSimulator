@@ -1,6 +1,7 @@
 #pragma once
 #include <stdbool.h>
 #include <stdint.h>
+#include <stddef.h>
 
 typedef struct VirtualMemoryPage
 {
@@ -9,8 +10,8 @@ typedef struct VirtualMemoryPage
 	bool valid;
 	// bool modified;	// we have no way to decipher if its modified or not since we don't have real memory
 	// bool referenced;	// we don't care if its referenced or not because it will not be allocated until its
-						// referenced and it wont be dereferenced until we need its space or the job is removed
-	struct PhysicalMemoryPage* physicalMemoryPage;
+	// referenced and it wont be dereferenced until we need its space or the job is removed
+	struct PhysicalMemoryPage *physicalMemoryPage;
 } VirtualMemoryPage;
 
-void setupVirtualMemoryPage(VirtualMemoryPage* page, size_t index);
+void setupVirtualMemoryPage(VirtualMemoryPage *page, size_t index);

@@ -27,8 +27,10 @@ private:
 	void ShowVirtualMemoryControl(int& currentJobIdx, int& currentJobId) const;
 	void ShowConstantEditor();
 	void ShowCreateJobControl() const;
-	void ShowJobOperationControl(int& currentJobIdx, int& currentJobId, ReplacementMethod& method, int& addressToAccess, int& physicalAddress);
+	void ShowJobOperationControl(int& currentJobIdx, int& currentJobId, ReplacementMethod& method, int& addressToAccess, int& physicalAddress, bool &runningSimulation);
 	void ShowJobSelector(int& currentJobIdx, int& currentJobId) const;
+	void ShowInstructionInspectionControl(int& addressToAccess, int& currentPhysicalAddress);
+	void ShowSimulation(bool& runningSimulation, int& addressToAccess, int& currentPhysicalAddress, int& currentJobId, int& currentJobIdx, ReplacementMethod& method);
 	void UpdateConstantValues(uint64_t &tmpPageSize, uint64_t& tmpPhysicalMemorySize, uint64_t& tmpVirtualMemorySize,
 		uint64_t& tmpOffsetBits, uint64_t& tmpInstructionBits, uint64_t& tmpPageBits, uint64_t& tmpVirtualPages, uint64_t& tmpPhysicalPages) const;
 };

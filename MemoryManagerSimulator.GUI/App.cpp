@@ -13,8 +13,8 @@
 #include "MemoryManagerGuiContext.h"
 
 #define GL_SILENCE_DEPRECATION
-#define WINDOW_SIZE_X 1280
-#define WINDOW_SIZE_Y 720
+constexpr int WINDOW_SIZE_X = 624;
+constexpr int WINDOW_SIZE_Y = 640;
 
 using namespace std;
 
