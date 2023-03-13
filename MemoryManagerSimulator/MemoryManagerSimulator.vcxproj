@@ -152,7 +152,6 @@
     <ClCompile Include="JobManager.c" />
     <ClCompile Include="MemoryManager.c" />
     <ClCompile Include="driver.c" />
-    <ClCompile Include="PageManagementTable.c" />
     <ClCompile Include="PhysicalMemoryPage.c" />
     <ClCompile Include="VirtualMemoryPage.c" />
   </ItemGroup>
@@ -168,7 +167,6 @@
     <ClInclude Include="PhysicalMemoryPage.h" />
     <ClInclude Include="MemoryManager.h" />
     <ClInclude Include="VirtualMemoryPage.h" />
-    <ClInclude Include="PageManagementTable.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

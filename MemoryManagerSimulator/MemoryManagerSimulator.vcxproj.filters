@@ -39,9 +39,6 @@
     <ClCompile Include="VirtualMemoryPage.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PageManagementTable.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Constants.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -69,9 +66,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="JobManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PageManagementTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="VirtualMemoryPage.h">

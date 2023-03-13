@@ -21,7 +21,7 @@ Job* createJob(MemoryManager* memoryManager, char* jobName, size_t jobId)
 			return NULL;
 	}
 	Job* newJob = malloc(sizeof(Job));
-	setupJob(newJob);
+	newJob = setupJob(newJob);
 	newJob->id = jobId;
 	newJob->name = jobName;
 	memoryManager->jobManager->jobs->append(memoryManager->jobManager->jobs, newJob, sizeof(Job));
@@ -37,7 +37,7 @@ bool removeJob(MemoryManager* memoryManager, size_t jobId)
 	{
 		for (size_t idx = 0; idx < VIRTUAL_PAGES; idx++)
 		{
-			VirtualMemoryPage* page = job->pmt->virtualMemoryPages[idx];
+			VirtualMemoryPage* page = job->virtualMemoryPages[idx];
 			if (page->valid)
 			{
 				memoryManager->lruQueue->list->removeAtValue(memoryManager->lruQueue->list, page->physicalMemoryPage, KeepAllocated);
@@ -66,7 +66,7 @@ void* accessJob(MemoryManager* memoryManager, size_t jobId, uint64_t virtualMemo
 			uint64_t offset = virtualMemoryAddress << (sizeof(uint64_t) * 8 - OFFSET_BITS) >> (sizeof(uint64_t) * 8 - OFFSET_BITS);
 
 			// get from pmt array
-			VirtualMemoryPage* virtualPage = job->pmt->virtualMemoryPages[virtualPageIndex];
+			VirtualMemoryPage* virtualPage = job->virtualMemoryPages[virtualPageIndex];
 			virtualPage->refCount++;
 
 

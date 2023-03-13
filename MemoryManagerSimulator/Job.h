@@ -1,13 +1,13 @@
 #pragma once
-#include "PageManagementTable.h"
+#include "VirtualMemoryPage.h"
 
 
 typedef struct Job
 {
 	char* name;
 	size_t id;
-	PageManagementTable* pmt;
+	VirtualMemoryPage* virtualMemoryPages[];
 } Job;
 
-void setupJob(Job* job);
+Job* setupJob(Job* job);
 void clearJob(Job* job);
