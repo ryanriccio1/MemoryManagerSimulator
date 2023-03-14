@@ -4,17 +4,31 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
-// needed for glfl <= 3.0
-//#if defined(_MSC_VER) && (_MSC_VER >= 1900) && !defined(IMGUI_DISABLE_WIN32_FUNCTIONS)
-//#pragma comment(lib, "legacy_stdio_definitions")
-//#endif
-
+/**
+ * Base data class for ImGui rendering to GLFW/OpenGL3.0 backend.
+ */
 class ImGuiDataContext
 {
 public:
-	ImGuiDataContext(GLFWwindow* window, const char* glsl_version);
+	/**
+	 * @brief Construct a new Im Gui Data Context object.
+	 *
+	 * @param window GLFW window to render to.
+	 * @param glsl_version GL shader version.
+	 */
+	ImGuiDataContext(GLFWwindow *window, const char *glsl_version);
 	virtual ~ImGuiDataContext();
+
+	/**
+	 * Render a new frame using GLFW and OpenGL3.
+	 */
 	void NewFrame();
+	/**
+	 * Update the new frame.
+	 */
 	virtual void Update();
+	/**
+	 * Render new frame.
+	 */
 	void Render();
 };

@@ -3,12 +3,13 @@
 
 #include "MemoryManager.h"
 
-
 int main()
 {
-    MemoryManager* memMgr = malloc(sizeof(MemoryManager));
+    // create memory manager
+    MemoryManager *memMgr = malloc(sizeof(MemoryManager));
     memMgr = setupMemoryManager(memMgr, 16, 128, 1024);
 
+    // display information about memory manager
     printf("PAGE SIZE: %lld\n", memMgr->PAGE_SIZE);
     printf("PHYSICAL MEMORY: %lld\n", memMgr->PHYSICAL_MEMORY_SIZE);
     printf("VIRUTAL MEMORY: %lld\n", memMgr->VIRTUAL_MEMORY_SIZE);
@@ -16,10 +17,10 @@ int main()
     printf("OFFSET BITS: %lld\n", memMgr->OFFSET_BITS);
     printf("PAGE BITS: %lld\n", memMgr->PAGE_BITS);
     printf("INSTRUCTION BITS: %lld\n", memMgr->INSTRUCTION_BITS);
-    printf("VIRTUAL PAGES: %lld\n", memMgr->VIRTUAL_PAGES);
     printf("PHYSICAL PAGES: %lld\n", memMgr->PHYSICAL_PAGES);
+    printf("VIRTUAL PAGES: %lld\n", memMgr->VIRTUAL_PAGES);
 
-    
+    // perform some test calculations
     createJob(memMgr, "test", 1);
     createJob(memMgr, "test2", 123);
 
@@ -30,7 +31,7 @@ int main()
     }
 
     removeJob(memMgr, 1);
-
+    // print info about memory manager queues and lists
     printf("\nVVP:\n");
     memMgr->validVirtualPages->print(memMgr->validVirtualPages);
     printf("\nFPP:\n");

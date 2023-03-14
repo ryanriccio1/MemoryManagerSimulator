@@ -187,7 +187,6 @@
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="MemoryManagerGuiContext.h" />
     <ClInclude Include="MemoryManagerWrapper.h" />
-    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="imgui\misc\debuggers\imgui.natvis" />

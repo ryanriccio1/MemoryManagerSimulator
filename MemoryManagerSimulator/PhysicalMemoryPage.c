@@ -2,10 +2,10 @@
 
 #include "PhysicalMemoryPage.h"
 
-
-void setupPhysicalMemoryPage(PhysicalMemoryPage* memory, size_t index, uint64_t physicalAddress)
+void setupPhysicalMemoryPage(PhysicalMemoryPage *memory, size_t index, uint64_t physicalAddress)
 {
 	assert(memory);
+	// setup initial values
 	memory->index = index;
 	memory->physicalAddress = physicalAddress;
 	memory->virtualMemoryPage = NULL;

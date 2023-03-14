@@ -1,6 +1,4 @@
-// File: 'consola.ttf' (459180 bytes)
-// Exported using binary_to_compressed_c.cpp
-static const char ConsolaTTF_compressed_data_base85[407480+1] =
+static const char ConsolaTTF_compressed_data_base85[407480 + 1] =
     "7])#######-Ru:Z'/###I),##e3UhL&huB$Pncd=t'WhPTFrr$Ui+##+W?t8csussk(#s$:u)##@,/h<$NS^XqJvr$mR%##sQ/e=YT<*Q87tr$#<%##2o8:9(m&)*urSv$xW&L>Sipe="
     "x_ch<#^)##)nbw'':ksB;8[r1:Jv8#mQv.#Ysa%CqEaoocs40#3hh;#*txmCccmO<C42=#A(%&#m@?0Di##/#;93jLO[]#Mh&T-D^YN<pbrU0#b1$2#(GEPDB;46rf2AqLr<TnLW$tLD"
     "7$Ws%EWi*MY8RtL1scW.;h^`I#AjnpMCvl/BcZ3:o6Q<BR.NI++;2U2Y)AX@0iR/G=a=)jHd#&YspL?-w)A>B:SuX@k_icWAFe(>qmnUC&=2AlUE;Bm3B3T[@C=GHX6@VQ?&]VRkp?@-"
@@ -2912,4 +2910,3 @@ static const char ConsolaTTF_compressed_data_base85[407480+1] =
     "HPfc3JJ@GI6[Y$#]5mWhFOBq%YH3L#klO`m,v&W^POK`JiNGm&tL3p()imYc*9@&ciwLF.ZKTUoa'te/IL>USccRdU6nkmpM);G;a](Y1i>hX&RY]x.69koO=es'6s_[f]Mum)imsx.v"
     ".W#>`?x4dR1YVp[=X9qgt*'2lrZ87Ena$M-hC1JZ%8Kjd+`&4h&TS_C:2H'6lB*Et[^ZPWvuJ;'ca3pqZ_Z4B>&R/Hl@0tfg#8iD:xIenE1VeeiJ<5sqs+gPj[0en@7$LUHPfWr88D+J"
     "o7=7704$Paf;M7@Z,st1[$4AM5=)xRT3C9Ni6Ikd4qan.;O8$'<2uK6BIOxfOb-_SZMgfsAo8AtkZ2d4";
-

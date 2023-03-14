@@ -1,3 +1,4 @@
+# generate .h file from image (RGBA)
 from PIL import Image
 
 
