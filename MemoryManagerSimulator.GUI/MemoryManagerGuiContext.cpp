@@ -12,12 +12,14 @@
 // use deprecated string functions
 #pragma warning(disable : 4996)
 
+using namespace std;
+
 MemoryManagerGuiContext::MemoryManagerGuiContext(GLFWwindow* window, const char* glsl_version,
                                                  bool divideDpiScaling) : ImGuiDataContext(window, glsl_version),
                                                                           window(window)
 {
 	// set random seed
-	srand(std::chrono::system_clock::now().time_since_epoch().count());
+	srand(chrono::system_clock::now().time_since_epoch().count());
 
 	// set scaling based on display scaling
 	float xScale, yScale;
@@ -189,7 +191,7 @@ void MemoryManagerGuiContext::ShowConstantEditor()
 			tmpVirtualMemorySize < tmpPageSize)
 		{
 			// page size can never be larger than either PMem or VMem
-			tmpPageSize = std::min(tmpPhysicalMemorySize, tmpVirtualMemorySize);
+			tmpPageSize = min(tmpPhysicalMemorySize, tmpVirtualMemorySize);
 		}
 
 		ImGui::InputInt("Physical Memory Size", (int*)&tmpPhysicalMemorySize, 16, 128);
@@ -230,7 +232,7 @@ void MemoryManagerGuiContext::ShowConstantEditor()
 		{
 			ImGui::CloseCurrentPopup();
 			// make a new memory manager
-			memoryManager = std::make_shared<MemoryManagerSimulatorWrapper>(
+			memoryManager = make_shared<MemoryManagerSimulatorWrapper>(
 				tmpPageSize, tmpPhysicalMemorySize, tmpVirtualMemorySize);
 		}
 		ImGui::SetItemDefaultFocus(); // focus on object in previous window
@@ -280,8 +282,8 @@ void MemoryManagerGuiContext::ShowSimulation(bool& runningSimulation, int& addre
                                              const ReplacementMethod& method) const
 {
 	// store the times that things occur at
-	static std::chrono::duration<long long, std::ratio<1, 1000>> endTime;
-	static std::chrono::duration<long long, std::ratio<1, 1000>> lastTime;
+	static chrono::duration<long long, ratio<1, 1000>> endTime;
+	static chrono::duration<long long, ratio<1, 1000>> lastTime;
 
 	static int currentIteration;
 
@@ -312,8 +314,8 @@ void MemoryManagerGuiContext::ShowSimulation(bool& runningSimulation, int& addre
 	ImGui::Spacing();
 
 	// get current time
-	const auto currentTime = duration_cast<std::chrono::milliseconds>(
-		std::chrono::system_clock::now().time_since_epoch());
+	const auto currentTime = duration_cast<chrono::milliseconds>(
+		chrono::system_clock::now().time_since_epoch());
 
 	if (runningSimulation)
 	{
@@ -321,7 +323,7 @@ void MemoryManagerGuiContext::ShowSimulation(bool& runningSimulation, int& addre
 		if (ImGui::Button("Stop Simulation", ImVec2(ImGui::GetContentRegionAvail().x, 30 * dpiScaleFactor)))
 		{
 			runningSimulation = false;
-			endTime = std::chrono::milliseconds(0);
+			endTime = chrono::milliseconds(0);
 			currentIteration = 0;
 		}
 
@@ -340,7 +342,7 @@ void MemoryManagerGuiContext::ShowSimulation(bool& runningSimulation, int& addre
 					// perform access and calculate completion time
 					currentPhysicalAddress = (uint64_t)memoryManager->
 						m_accessJob(currentJobId, addressToAccess, method);
-					lastTime += std::chrono::milliseconds(simTime);
+					lastTime += chrono::milliseconds(simTime);
 					currentIteration++;
 				}
 				else
@@ -361,10 +363,10 @@ void MemoryManagerGuiContext::ShowSimulation(bool& runningSimulation, int& addre
 			currentIteration = 0;
 
 			// calculate total time needed and setup lastTime for first iteration
-			endTime = duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()) +
-				std::chrono::milliseconds(simTime * simIterations);
-			lastTime = duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()) +
-				std::chrono::milliseconds(simTime);
+			endTime = duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch()) +
+				chrono::milliseconds(simTime * simIterations);
+			lastTime = duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch()) +
+				chrono::milliseconds(simTime);
 		}
 		ImGui::EndDisabled();
 	}
@@ -373,7 +375,7 @@ void MemoryManagerGuiContext::ShowSimulation(bool& runningSimulation, int& addre
 
 void MemoryManagerGuiContext::ShowJobSelector(int& currentJobIdx, int& currentJobId) const
 {
-	std::string combo_preview_value;
+	string combo_preview_value;
 	LinkedList* jobList = nullptr;
 	if (memoryManager)
 	{
@@ -385,7 +387,7 @@ void MemoryManagerGuiContext::ShowJobSelector(int& currentJobIdx, int& currentJo
 			// Pass in the preview value visible before opening the combo (it could be anything)
 			// if the selected job exists, display it for the combo box
 			if (selectedJob)
-				combo_preview_value = std::to_string(selectedJob->id);
+				combo_preview_value = to_string(selectedJob->id);
 		}
 	}
 
@@ -404,9 +406,9 @@ void MemoryManagerGuiContext::ShowJobSelector(int& currentJobIdx, int& currentJo
 				if (currentJob)
 				{
 					// create the label
-					std::string jobIdString = std::to_string(currentJob->id);
-					std::string jobNameString = currentJob->name;
-					std::string label = fmt::format("{:<5} | {:>10}", jobIdString, jobNameString);
+					string jobIdString = to_string(currentJob->id);
+					string jobNameString = currentJob->name;
+					string label = fmt::format("{:<5} | {:>10}", jobIdString, jobNameString);
 
 					// display the item
 					if (ImGui::Selectable(label.c_str(), is_selected))
@@ -535,7 +537,7 @@ void MemoryManagerGuiContext::ShowInstructionInspectionControl(const int& addres
 			unsigned int tmp = static_cast<unsigned int>(addressToAccess) << (sizeof(unsigned int) * 8 - memoryManager->
 				INSTRUCTION_BITS + idx) >> ((sizeof(unsigned int) * 8) - 1);
 			ImGui::SameLine();
-			ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), std::to_string(tmp).c_str());
+			ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), to_string(tmp).c_str());
 		}
 
 		// perform for offset within page
@@ -545,7 +547,7 @@ void MemoryManagerGuiContext::ShowInstructionInspectionControl(const int& addres
 			unsigned int tmp = static_cast<unsigned int>(addressToAccess) << (sizeof(unsigned int) * 8 - memoryManager->
 				OFFSET_BITS + idx) >> ((sizeof(unsigned int) * 8) - 1);
 			ImGui::SameLine();
-			ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), std::to_string(tmp).c_str());
+			ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), to_string(tmp).c_str());
 		}
 
 		ImGui::PopFont();
@@ -554,13 +556,13 @@ void MemoryManagerGuiContext::ShowInstructionInspectionControl(const int& addres
 		ImGui::Text("Page Index:    ");
 		ImGui::SameLine();
 		ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f),
-		                   std::to_string(addressToAccess >> memoryManager->OFFSET_BITS).c_str());
+		                   to_string(addressToAccess >> memoryManager->OFFSET_BITS).c_str());
 
 		ImGui::Text("Page Offset:   ");
 		ImGui::SameLine();
 		unsigned int offset = static_cast<unsigned int>(addressToAccess) << (sizeof(addressToAccess) * 8 - memoryManager
 			->OFFSET_BITS) >> (sizeof(addressToAccess) * 8 - memoryManager->OFFSET_BITS);
-		ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), std::to_string(offset).c_str());
+		ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), to_string(offset).c_str());
 	}
 	else
 	{
@@ -632,23 +634,23 @@ void MemoryManagerGuiContext::ShowVirtualMemoryControl(const int& currentJobIdx,
 						// format all data based on which column in the row we are in
 						if (col == 0)
 						{
-							std::string addr = fmt::format("{:#x}", virtualAddress);
+							string addr = fmt::format("{:#x}", virtualAddress);
 							ImGui::Text(addr.c_str());
 							virtualAddress += memoryManager->PAGE_SIZE;
 						}
 						if (col == 1)
 						{
-							std::string index = std::to_string(job->virtualMemoryPages[row]->index);
+							string index = to_string(job->virtualMemoryPages[row]->index);
 							ImGui::Text(index.c_str());
 						}
 						if (col == 2)
 						{
-							std::string valid = std::to_string(job->virtualMemoryPages[row]->valid);
+							string valid = to_string(job->virtualMemoryPages[row]->valid);
 							ImGui::Text(valid.c_str());
 						}
 						if (col == 3)
 						{
-							std::string refCount = std::to_string(job->virtualMemoryPages[row]->refCount);
+							string refCount = to_string(job->virtualMemoryPages[row]->refCount);
 							ImGui::Text(refCount.c_str());
 						}
 						if (col == 4)
@@ -716,13 +718,13 @@ void MemoryManagerGuiContext::ShowPhysicalMemoryControl() const
 							virtualMemoryPage;
 						if (col == 0)
 						{
-							std::string addr = fmt::format("{:#x}", physicalAddress);
+							string addr = fmt::format("{:#x}", physicalAddress);
 							ImGui::Text(addr.c_str());
 							physicalAddress += memoryManager->PAGE_SIZE;
 						}
 						if (col == 1)
 						{
-							std::string index = std::to_string(
+							string index = to_string(
 								memoryManager->memoryManager->physicalMemoryPages[row]->index);
 							ImGui::Text(index.c_str());
 						}
@@ -749,14 +751,14 @@ void MemoryManagerGuiContext::ShowPhysicalMemoryControl() const
 										}
 									}
 								}
-								ImGui::Text(std::to_string(jobId).c_str());
+								ImGui::Text(to_string(jobId).c_str());
 							}
 						}
 						if (col == 3)
 						{
 							if (virtualPage)
 							{
-								ImGui::Text(std::to_string(virtualPage->index).c_str());
+								ImGui::Text(to_string(virtualPage->index).c_str());
 							}
 						}
 						if (col == 4)
