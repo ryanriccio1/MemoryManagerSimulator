@@ -19,7 +19,7 @@ using namespace std;
 int WinMain()
 {
 	bool divideDpiScaling = false;
-// Decide GL+GLSL versions
+	// Decide GL+GLSL versions
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 	// GL ES 2.0 + GLSL 100
 	const char *glsl_version = "#version 100";
@@ -36,11 +36,11 @@ int WinMain()
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);		   // Required on Mac
 #else
 	// GL 3.3 + GLSL 130
-	const char *glsl_version = "#version 130";
+	auto glsl_version = "#version 130";
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // 3.2+ only
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);		   // 3.0+ only
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // 3.0+ only
 #endif
 
 	// setup window manager
@@ -48,7 +48,7 @@ int WinMain()
 		return 1;
 
 	// create window
-	GLFWwindow *window = glfwCreateWindow(WINDOW_SIZE_X, WINDOW_SIZE_Y, "Memory Manager Simulator", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(WINDOW_SIZE_X, WINDOW_SIZE_Y, "Memory Manager Simulator", nullptr, nullptr);
 
 	// set the window size relative to display scaling
 	float xScale, yScale;

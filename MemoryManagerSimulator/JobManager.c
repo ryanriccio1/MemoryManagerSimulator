@@ -11,7 +11,7 @@ void setupJobManager(JobManager *jobManager)
 	setupLinkedList(jobManager->jobs, Pointer);
 }
 
-void clearJobManager(JobManager *jobManager)
+void clearJobManager(const JobManager *jobManager)
 {
 	assert(jobManager);
 	// free job list

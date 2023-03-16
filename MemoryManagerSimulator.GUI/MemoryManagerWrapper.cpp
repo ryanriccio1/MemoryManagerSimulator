@@ -1,7 +1,8 @@
 #include "MemoryManagerWrapper.h"
 #include "MemoryManagerGuiContext.h"
 
-MemoryManagerSimulatorWrapper::MemoryManagerSimulatorWrapper(uint64_t pageSize, uint64_t physicalMemorySize, uint64_t virtualMemorySize)
+MemoryManagerSimulatorWrapper::MemoryManagerSimulatorWrapper(uint64_t pageSize, uint64_t physicalMemorySize,
+                                                             uint64_t virtualMemorySize)
 {
 	PAGE_SIZE = pageSize;
 	PHYSICAL_MEMORY_SIZE = physicalMemorySize;
@@ -30,7 +31,7 @@ MemoryManagerSimulatorWrapper::~MemoryManagerSimulatorWrapper()
 	delete memoryManager;
 }
 
-void MemoryManagerSimulatorWrapper::m_createJob(char *jobName, size_t jobId) const
+void MemoryManagerSimulatorWrapper::m_createJob(char* jobName, size_t jobId) const
 {
 	createJob(memoryManager, jobName, jobId);
 }
@@ -42,8 +43,8 @@ bool MemoryManagerSimulatorWrapper::m_removeJob(size_t jobId) const
 	return removeJob(memoryManager, jobId);
 }
 
-void *MemoryManagerSimulatorWrapper::m_accessJob(size_t jobId,
-												 uint64_t virtualMemoryAddress, ReplacementMethod method) const
+void* MemoryManagerSimulatorWrapper::m_accessJob(size_t jobId,
+                                                 uint64_t virtualMemoryAddress, ReplacementMethod method) const
 {
 	return accessJob(memoryManager, jobId, virtualMemoryAddress, method);
 }

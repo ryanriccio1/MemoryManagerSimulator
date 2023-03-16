@@ -1,6 +1,6 @@
 #include "ImGuiDataContext.h"
 
-ImGuiDataContext::ImGuiDataContext(GLFWwindow *window, const char *glsl_version)
+ImGuiDataContext::ImGuiDataContext(GLFWwindow* window, const char* glsl_version)
 {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();

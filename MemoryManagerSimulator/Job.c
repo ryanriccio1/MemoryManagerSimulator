@@ -5,7 +5,7 @@
 #include "VirtualMemoryPage.h"
 #include "MemoryManager.h"
 
-Job *setupJob(MemoryManager *memoryManager, Job *job)
+Job *setupJob(const MemoryManager *memoryManager, Job *job)
 {
 	assert(job);
 	assert(memoryManager);
@@ -21,7 +21,7 @@ Job *setupJob(MemoryManager *memoryManager, Job *job)
 	}
 	return job;
 }
-void clearJob(MemoryManager *memoryManager, Job *job)
+void clearJob(const MemoryManager *memoryManager, Job *job)
 {
 	assert(job);
 	assert(memoryManager);
