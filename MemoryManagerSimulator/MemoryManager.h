@@ -79,7 +79,7 @@ void *accessJob(MemoryManager *memoryManager, size_t jobId, uint64_t virtualMemo
  * @param jobId ID of job to find.
  * @return Pointer to the found job, NULL if not found.
  */
-struct Job *findJob(MemoryManager *memoryManager, size_t jobId);
+struct Job *findJob(const MemoryManager *memoryManager, size_t jobId);
 
 /**
  * @brief Will return first free page or free a page using a selected algorithm.
@@ -88,7 +88,7 @@ struct Job *findJob(MemoryManager *memoryManager, size_t jobId);
  * @param method FIFO, LRU, LFU.
  * @return Pointer to the physical page we freed.
  */
-PhysicalMemoryPage *getFreePage(MemoryManager *memoryManager, ReplacementMethod method);
+PhysicalMemoryPage *getFreePage(const MemoryManager *memoryManager, ReplacementMethod method);
 
 /**
  * @brief Sets up memory manager.

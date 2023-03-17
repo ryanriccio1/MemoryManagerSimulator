@@ -22,4 +22,4 @@ void setupJobManager(JobManager *jobManager);
  *
  * @param jobManager Job manager to clear.
  */
-void clearJobManager(JobManager *jobManager);
+void clearJobManager(const JobManager *jobManager);

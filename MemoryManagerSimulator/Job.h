@@ -19,7 +19,7 @@ typedef struct Job
  * @param job Job being setup.
  * @returns Pointer to job that was setup. (MUST BE REASSIGNED SINCE IT IS REALLOC'ed)
  */
-Job *setupJob(struct MemoryManager *memoryManager, Job *job);
+Job *setupJob(const struct MemoryManager *memoryManager, Job *job);
 
 /**
  * @brief Clear resources used by job.
@@ -27,4 +27,4 @@ Job *setupJob(struct MemoryManager *memoryManager, Job *job);
  * @param memoryManager Pointer to memory manager where job is located.
  * @param job Job being cleared.
  */
-void clearJob(struct MemoryManager *memoryManager, Job *job);
+void clearJob(const struct MemoryManager *memoryManager, Job *job);
