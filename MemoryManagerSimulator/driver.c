@@ -12,7 +12,7 @@ int main()
     // display information about memory manager
     printf("PAGE SIZE: %lld\n", memMgr->PAGE_SIZE);
     printf("PHYSICAL MEMORY: %lld\n", memMgr->PHYSICAL_MEMORY_SIZE);
-    printf("VIRUTAL MEMORY: %lld\n", memMgr->VIRTUAL_MEMORY_SIZE);
+    printf("VIRTUAL MEMORY: %lld\n", memMgr->VIRTUAL_MEMORY_SIZE);
 
     printf("OFFSET BITS: %lld\n", memMgr->OFFSET_BITS);
     printf("PAGE BITS: %lld\n", memMgr->PAGE_BITS);
@@ -42,4 +42,5 @@ int main()
     memMgr->lruQueue->list->print(memMgr->lruQueue->list);
 
     cleanupMemoryManager(memMgr);
+    free(memMgr);
 }
